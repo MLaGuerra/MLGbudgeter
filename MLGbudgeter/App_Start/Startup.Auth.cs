@@ -58,11 +58,11 @@ namespace MLGbudgeter
             //   appId: "",
             //   appSecret: "");
 
-            app.UseGitHubAuthentication(new GitHubOAuth2AuthenticationOptions()
-            {
-               appId: "fd934a04addd1feadcc3",
-               appSecret: "a26bda36d1b03fff2bd035fe7204c8d3845ddb78"
-               });
+            //app.UseGitHubAuthentication(options =>
+            //{
+            //   options.ClientId = "fd934a04addd1feadcc3",
+            //   options.ClientSecret = "a26bda36d1b03fff2bd035fe7204c8d3845ddb78"
+            //});
 
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {
