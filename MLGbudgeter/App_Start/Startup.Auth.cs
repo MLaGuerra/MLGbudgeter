@@ -34,7 +34,7 @@ namespace MLGbudgeter
                         validateInterval: TimeSpan.FromMinutes(30),
                         regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager))
                 }
-            });            
+            });
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
             // Enables the application to temporarily store user information when they are verifying the second factor in the two-factor authentication process.
@@ -57,6 +57,12 @@ namespace MLGbudgeter
             //app.UseFacebookAuthentication(
             //   appId: "",
             //   appSecret: "");
+
+            app.UseGitHubAuthentication(new GitHubOAuth2AuthenticationOptions()
+            {
+               appId: "fd934a04addd1feadcc3",
+               appSecret: "a26bda36d1b03fff2bd035fe7204c8d3845ddb78"
+               });
 
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {
