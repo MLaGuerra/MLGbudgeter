@@ -4,6 +4,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
+using Owin.Security.Providers.GitHub;
+using Microsoft.Owin.Security.Twitter;
 using Owin;
 using MLGbudgeter.Models;
 
@@ -50,20 +52,30 @@ namespace MLGbudgeter
             //    clientId: "",
             //    clientSecret: "");
 
-            //app.UseTwitterAuthentication(
-            //   consumerKey: "",
-            //   consumerSecret: "");
-
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
-
-            //app.UseGitHubAuthentication(options =>
+            //app.UseTwitterAuthentication(new TwitterAuthenticationOptions()
             //{
-            //   options.ClientId = "fd934a04addd1feadcc3",
-            //   options.ClientSecret = "a26bda36d1b03fff2bd035fe7204c8d3845ddb78"
+            //    consumerKey: "lQCqLN7EwoJswtPiAjKi5uPCh",
+            //   consumerSecret: "ihFb516o3xO5RoHouMs6wZMlZIF6BP04kV7bBPTQJA51eQPsfx"
             //});
 
+            //https://apps.twitter.com/
+            app.UseTwitterAuthentication(
+               consumerKey: "lQCqLN7EwoJswtPiAjKi5uPCh",
+               consumerSecret: "ihFb516o3xO5RoHouMs6wZMlZIF6BP04kV7bBPTQJA51eQPsfx");
+
+            //https://developers.facebook.com/apps/
+            app.UseFacebookAuthentication(
+               appId: "1822515058074820",
+               appSecret: "0fe86e6d6ea62a7a9d907291d00c9a02");
+
+            //https://github.com/settings/applications/518028
+            app.UseGitHubAuthentication(new GitHubAuthenticationOptions()
+            {
+                ClientId = "fd934a04addd1feadcc3",
+                ClientSecret = "a26bda36d1b03fff2bd035fe7204c8d3845ddb78"
+            });
+
+            //https://console.developers.google.com
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {
                 ClientId = "975497889136-4ipuika0fbq9ctosjl0f81ceb9st7lmn.apps.googleusercontent.com",

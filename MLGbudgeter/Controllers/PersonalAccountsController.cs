@@ -37,8 +37,11 @@ namespace MLGbudgeter.Controllers
         }
 
         // GET: PersonalAccounts/Create
+        [RequireHousehold]
         public ActionResult Create()
         {
+            PersonalAccount pc = new PersonalAccount();
+            pc.HouseholdId = User.Identity.GetHouseholdId().Value;
             ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name");
             return View();
         }

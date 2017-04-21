@@ -3,6 +3,10 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Linq;
+using System.Security.Principal;
+using System.Web;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace MLGbudgeter.Models
 {
@@ -14,22 +18,49 @@ namespace MLGbudgeter.Models
         //public string DisplayName { get; internal set; }
         //public string FirstName { get; internal set; }
         //public string LastName { get; internal set; }
-        public string FullName { get; internal set; }
+        //public string FullName { get; internal set; }
 
+        public int? HouseholdId { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
+            
             // Add custom user claims here
+            userIdentity.AddClaim(new Claim("HouseholdId", this.HouseholdId.ToString()));
             return userIdentity;
         }
+        public virtual Household Household { get; set; }
+
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string DisplayName { get; set; }
-        public int? HouseholdId { get; set; }
-
-        public virtual Household Household { get; set; }
+        public string FullName { get; set; }
     }
+    
+    public static class AuthExtensions
+    {
+        public static int? GetHouseholdId(this IIdentity user)
+        {
+            var claimsIdentity = (ClaimsIdentity)user;
+            var HouseholdClaim = claimsIdentity.Claims.FirstOrDefault(c => c.Type == "HouseholdId");
+            if (HouseholdClaim != null)
+                return int.Parse(HouseholdClaim.Value);
+            else
+                return null;
+        }
+        public static bool IsInHousehold(this IIdentity user)
+        {
+            var householdClaim = ((ClaimsIdentity)user).Claims.FirstOrDefault(c => c.Type == "HouseholdId");
+            return householdClaim != null && string.IsNullOrWhiteSpace(householdClaim.Value);
+        }
+        public static async Task RefreshAuthentication(this HttpContextBase context, ApplicationUser user)
+        {
+            context.GetOwinContext().Authentication.SignOut();
+            await context.GetOwinContext().Get<ApplicationSignInManager>().SignInAsync(user, isPersistent: false, rememberBrowser: false);
+        }
+    }
+
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
