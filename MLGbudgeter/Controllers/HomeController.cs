@@ -76,7 +76,7 @@ namespace MLGbudgeter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> LeaveHousehold()
         {
-            var user = db.Users.Find(User.Identity.GetUserId(user));
+            var user = db.Users.Find(User.Identity.GetUserId());
             await ControllerContext.HttpContext.RefreshAuthentication(user);
             return RedirectToAction("Create", "Household");
         }
