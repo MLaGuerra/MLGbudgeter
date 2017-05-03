@@ -7,6 +7,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Web;
 using Microsoft.AspNet.Identity.Owin;
+using System.Collections.Generic;
 
 namespace MLGbudgeter.Models
 {
@@ -20,24 +21,28 @@ namespace MLGbudgeter.Models
         //public string LastName { get; internal set; }
         //public string FullName { get; internal set; }
 
-        public int? HouseholdId { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
-            
+
             // Add custom user claims here
             userIdentity.AddClaim(new Claim("HouseholdId", this.HouseholdId.ToString()));
             return userIdentity;
         }
-        public virtual Household Household { get; set; }
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string DisplayName { get; set; }
         public string FullName { get; set; }
+        public int? HouseholdId { get; set; }
+        public string InviteEmail { get; set; }
+
+        public virtual Household Household { get; set; }
+        public virtual ICollection<Invite> Invites { get; set; }
+        public virtual ICollection<PersonalAccount> Accounts { get; set; }
     }
-    
+
     public static class AuthExtensions
     {
         public static int? GetHouseholdId(this IIdentity user)
@@ -52,8 +57,9 @@ namespace MLGbudgeter.Models
         public static bool IsInHousehold(this IIdentity user)
         {
             var householdClaim = ((ClaimsIdentity)user).Claims.FirstOrDefault(c => c.Type == "HouseholdId");
-            return householdClaim != null && string.IsNullOrWhiteSpace(householdClaim.Value);
+            return householdClaim != null && !string.IsNullOrWhiteSpace(householdClaim.Value);
         }
+        //This secretly logs a user out, and logs them back in, when they "leave" a household resulting in an immediate identity refresh
         public static async Task RefreshAuthentication(this HttpContextBase context, ApplicationUser user)
         {
             context.GetOwinContext().Authentication.SignOut();
@@ -79,5 +85,6 @@ namespace MLGbudgeter.Models
         public DbSet<Category> Categories { get; set; }
         public DbSet<Budget> Budgets { get; set; }
         public DbSet<BudgetItem> BudgetItems { get; set; }
+        public DbSet<Invite> Invites { get; set; }
     }
 }

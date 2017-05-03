@@ -5,7 +5,6 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin.Security.Providers.GitHub;
-using Microsoft.Owin.Security.Twitter;
 using Owin;
 using MLGbudgeter.Models;
 
@@ -52,12 +51,6 @@ namespace MLGbudgeter
             //    clientId: "",
             //    clientSecret: "");
 
-            //app.UseTwitterAuthentication(new TwitterAuthenticationOptions()
-            //{
-            //    consumerKey: "lQCqLN7EwoJswtPiAjKi5uPCh",
-            //   consumerSecret: "ihFb516o3xO5RoHouMs6wZMlZIF6BP04kV7bBPTQJA51eQPsfx"
-            //});
-
             //https://apps.twitter.com/
             app.UseTwitterAuthentication(
                consumerKey: "lQCqLN7EwoJswtPiAjKi5uPCh",
@@ -68,7 +61,7 @@ namespace MLGbudgeter
                appId: "1822515058074820",
                appSecret: "0fe86e6d6ea62a7a9d907291d00c9a02");
 
-            //https://github.com/settings/applications/518028
+            //https://github.com/settings/developers
             app.UseGitHubAuthentication(new GitHubAuthenticationOptions()
             {
                 ClientId = "fd934a04addd1feadcc3",

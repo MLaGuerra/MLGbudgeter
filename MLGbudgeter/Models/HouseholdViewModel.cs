@@ -11,7 +11,7 @@ namespace MLGbudgeter.Models
     {
         public int? HHId { get; set; }
         public string HHName { get; set;}
-        public string InviteToken { get; set; }
+        public bool IsJoinHH { get; set; }
         public ApplicationUser Member { get; set; }
     }
 }

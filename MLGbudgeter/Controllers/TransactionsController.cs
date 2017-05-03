@@ -46,7 +46,7 @@ namespace MLGbudgeter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,AccountId,Description,Date,Amount,Type,CategoryId,EnteredbyId,Reconciled,ReconciiledAmlount")] Transaction transaction)
+        public ActionResult Create([Bind(Include = "Id,AccountId,Description,Date,Amount,Type,CategoryId,EnteredById,Reconciled,ReconciledAmount")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +78,7 @@ namespace MLGbudgeter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,AccountId,Description,Date,Amount,Type,CategoryId,EnteredbyId,Reconciled,ReconciiledAmlount")] Transaction transaction)
+        public ActionResult Edit([Bind(Include = "Id,AccountId,Description,Date,Amount,Type,CategoryId,EnteredById,Reconciled,ReconciledAmount")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {

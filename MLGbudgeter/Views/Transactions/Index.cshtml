@@ -30,13 +30,13 @@
             @Html.DisplayNameFor(model => model.CategoryId)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.EnteredbyId)
+            @Html.DisplayNameFor(model => model.EnteredById)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Reconciled)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ReconciiledAmlount)
+            @Html.DisplayNameFor(model => model.ReconciledAmount)
         </th>
         <th></th>
     </tr>
@@ -62,13 +62,13 @@
             @Html.DisplayFor(modelItem => item.CategoryId)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.EnteredbyId)
+            @Html.DisplayFor(modelItem => item.EnteredById)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Reconciled)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ReconciiledAmlount)
+            @Html.DisplayFor(modelItem => item.ReconciledAmount)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

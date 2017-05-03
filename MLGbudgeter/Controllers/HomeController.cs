@@ -3,6 +3,7 @@ using MLGbudgeter.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -12,10 +13,17 @@ namespace MLGbudgeter.Controllers
     public class HomeController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-
+        [RequireHousehold]
         public ActionResult Index()
         {
-            return View();
+            var id = User.Identity.GetHouseholdId();
+            
+            Household household = db.Households.Find(id);
+            if (household == null)
+            {
+                return HttpNotFound();
+            }
+            return View(household);
         }
 
         public ActionResult About()
@@ -31,11 +39,39 @@ namespace MLGbudgeter.Controllers
 
             return View();
         }
-
-        public ActionResult CreateJoinHousehold()
+        [Authorize]
+        public ActionResult CreateJoinHousehold(Guid? code)
         {
+            //If Current USer accessig this page already has a Household, redirect to their dashboard
+            if(User.Identity.IsInHousehold())
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             HouseholdViewModel vm = new HouseholdViewModel();
-            return View(vm);
+
+            //Determine User has been sent an invite and set property values
+            if (code != null && ValidateInvite())
+            {
+                Invite result = db.Invites.FirstOrDefault(i => i.HHToken == code);
+                vm.IsJoinHH = true;
+                vm.HHId = result.HouseholdId;
+                vm.HHName = result.Household.Name;
+
+                //Set USED flag to true for this invite
+                result.HasBeenUsed = true;
+
+                ApplicationUser user = db.Users.Find(User.Identity.GetUserId());
+                user.InviteEmail = result.Email;
+                db.SaveChanges();
+            }
+
+                return View(vm);
+        }
+
+        private bool ValidateInvite()
+        {
+            return true;
         }
 
         [Authorize]
@@ -53,6 +89,8 @@ namespace MLGbudgeter.Controllers
             hh.Members.Add(vm.Member);
             db.SaveChanges();
 
+            var user = db.Users.Find(User.Identity.GetUserId());
+            
             return RedirectToAction("Index", "Households");
         }
 
@@ -78,7 +116,7 @@ namespace MLGbudgeter.Controllers
         {
             var user = db.Users.Find(User.Identity.GetUserId());
             await ControllerContext.HttpContext.RefreshAuthentication(user);
-            return RedirectToAction("Create", "Household");
+            return RedirectToAction("Index", "Household");
         }
     }
 }

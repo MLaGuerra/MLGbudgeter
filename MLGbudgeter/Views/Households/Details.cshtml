@@ -20,6 +20,18 @@
 
     </dl>
 </div>
+
+<h4>Household Members</h4>
+<div>
+    <hr />
+    <ul>
+        @foreach (var mem in Model.Members)
+        {
+            <li>@mem.FirstName</li>
+        }
+    </ul>
+</div>
+
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")

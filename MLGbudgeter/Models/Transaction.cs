@@ -14,9 +14,9 @@ namespace MLGbudgeter.Models
         public decimal Amount { get; set; }
         public bool Type { get; set; }
         public int CategoryId { get; set; }
-        public string EnteredbyId { get; set; }
+        public string EnteredById { get; set; }
         public bool Reconciled { get; set; }
-        public decimal ReconciiledAmlount { get; set; }
+        public decimal ReconciledAmount { get; set; }
 
         public virtual ICollection<Transaction> Transactions { get; set; }
         public virtual Household Household { get; set; }
